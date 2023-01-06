@@ -1,4 +1,0 @@
-repository "Chess Emblem@Shallow_Water_Studio@cloud"
-  path "/"
-    br "/main"
-    co "/main"
