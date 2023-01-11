@@ -145,12 +145,14 @@ public class GridBehaviour : MonoBehaviour
                     {
                         movementController.selectedMaterial = unitMaterials[0];
                         movementController.deSelectedMaterial = unitMaterials[1];
+                        movementController.team = "white";
                     }
                     if (j < rows / 2)
                     {
                         obj.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
                         movementController.selectedMaterial = unitMaterials[2];
                         movementController.deSelectedMaterial = unitMaterials[3];
+                        movementController.team = "black";
                     }
                 }
             }
@@ -225,7 +227,6 @@ public class GridBehaviour : MonoBehaviour
         InitialSetUp();
         int x = startX;
         int y = startY;
-        int[] testArray = new int[rows * columns];
         for (int step = 1; step < rows * columns; step++)
         {
             foreach(GameObject obj in gridArray)

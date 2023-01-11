@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     bool unitSelected = false;
     MovementController selectedUnit;
 
+    string playersTeam = "white";
+
     public LayerMask groundLayer;
 
     private void Update()
@@ -22,7 +24,14 @@ public class PlayerController : MonoBehaviour
                 if (hit.transform.GetComponent<GridStat>().objektOnTile == null)
                 {
                     GridStat tmpGridStat = hit.transform.GetComponent<GridStat>();
-                    selectedUnit.GetComponent<MovementController>().ShowPathToMouse(tmpGridStat.x, tmpGridStat.y);
+                    if (hit.transform.GetComponent<MovementController>() != null && hit.transform.GetComponent<MovementController>().team != playersTeam)
+                    {
+                        selectedUnit.GetComponent<MovementController>().ShowPathToMouse(tmpGridStat.x, tmpGridStat.y, true);
+                    }
+                    else
+                    {
+                        selectedUnit.GetComponent<MovementController>().ShowPathToMouse(tmpGridStat.x, tmpGridStat.y);
+                    }
                 }
             }
         }
@@ -49,8 +58,19 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.transform.GetComponent<GridStat>().objektOnTile != null)
             {
-                SelectUnit(hit);
-                return;
+                if (hit.transform.GetComponent<MovementController>() != null)
+                {
+                    if (hit.transform.GetComponent<MovementController>().team == playersTeam)
+                    {
+                        SelectUnit(hit);
+                        return;
+                    }
+                    else if (hit.transform.GetComponent<MovementController>().team != playersTeam)
+                    {
+                        AttackUnit(hit);
+                        return;
+                    }
+                }
             }
 
             MoveUnit(hit);
@@ -102,7 +122,17 @@ public class PlayerController : MonoBehaviour
         unitSelected = false;
         selectedUnit.DeselectUnit();
         selectedUnit = null;
-        return;
+    }
+
+    private void AttackUnit(RaycastHit hit)
+    {
+        int x = hit.transform.GetComponent<GridStat>().x;
+        int y = hit.transform.GetComponent<GridStat>().y;
+
+        selectedUnit.AttackAtLocation(x, y);
+        unitSelected = false;
+        selectedUnit.DeselectUnit();
+        selectedUnit = null;
     }
 
 }

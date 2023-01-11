@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,15 +18,15 @@ public class MovementController : MonoBehaviour
 
     public float speed = 0.5f;
 
-    public bool move = false;
-
     private List<GameObject> path;
 
     GridBehaviour gridBehaviour;
 
+    public string team;
     public Material selectedMaterial;
     public Material deSelectedMaterial;
     MeshRenderer meshRenderer;
+    RaycastHit tmpHit;
 
     public Material arrowMat;
     LineRenderer lineRenderer;
@@ -66,15 +67,6 @@ public class MovementController : MonoBehaviour
         meshRenderer.material = deSelectedMaterial;
     }
 
-    private void Update()
-    {
-        if (move)
-        {
-            MoveToLocation(targetLocationX, targetLocationY);
-            move = false;
-        }
-    }
-
     public void SelectUnit()
     {
         meshRenderer.material = selectedMaterial;
@@ -103,6 +95,23 @@ public class MovementController : MonoBehaviour
         
     }
 
+    public void AttackAtLocation(int x, int y)
+    {
+        path = gridBehaviour.GetPath(this, x, y);
+
+        if (path.Count > unitStats.spd)
+        {
+            path.RemoveRange(0, path.Count - unitStats.spd - 1);
+        }
+
+        x = path[0].GetComponent<GridStat>().x;
+        y = path[0].GetComponent<GridStat>().y;
+
+        ShowPathToMouse(x, y);
+
+        StartCoroutine(LerpPosition(x, y, speed));
+    }
+
     IEnumerator LerpPosition(int x, int y, float duration)
     {
         gridBehaviour.gridArray[gridXPosition, gridYPosition].GetComponent<GridStat>().objektOnTile = null;
@@ -126,9 +135,14 @@ public class MovementController : MonoBehaviour
         RemoveArrowPath();
     }
 
-    public void ShowPathToMouse(int mouseX, int mouseY)
+    public void ShowPathToMouse(int mouseX, int mouseY, bool isEnemy = false)
     {
         List<GameObject> tmpPath = gridBehaviour.GetPath(this, mouseX, mouseY);
+
+        if (isEnemy)
+        {
+            tmpPath.RemoveRange(0, path.Count - unitStats.spd - 1 - unitStats.atkRange);
+        }
 
         if (tmpPath.Count > unitStats.spd)
         {
