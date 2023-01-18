@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GridBehaviour : MonoBehaviour
@@ -47,7 +48,6 @@ public class GridBehaviour : MonoBehaviour
         if (gridPrefab)
         {
             GenerateGrid();
-            SpawnUnits();
         }
         else
         {
@@ -166,12 +166,33 @@ public class GridBehaviour : MonoBehaviour
         endX = desiredX;
         endY = desiredY;
 
+        if (gridArray[endX, endY].GetComponent<GridStat>().objektOnTile != null)
+        {
+            float[] tmpArray = new float[4];
+            try { tmpArray[0] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX + 1, endY].transform.position); }
+            catch { tmpArray[0] = 1000000; }
+            try { tmpArray[1] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX - 1, endY].transform.position); }
+            catch { tmpArray[1] = 1000000; }
+            try { tmpArray[2] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY + 1].transform.position); }
+            catch { tmpArray[2] = 1000000; }
+            try { tmpArray[3] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY - 1].transform.position); }
+            catch { tmpArray[3] = 1000000; }
+
+            float minValue = tmpArray.Min<float>();
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (minValue == tmpArray[i]) { minValue = i; }
+            }
+
+            if (minValue == 0) { endX = endX + 1; }
+            if (minValue == 1) { endX = endX - 1; }
+            if (minValue == 2) { endY = endY + 1; }
+            if (minValue == 3) { endY = endY - 1; }
+        }
+
         SetDistance();
         SetPath();
-        /*for (int i = 0; i < path.Count; i++)
-        {
-            Debug.Log(path[i].GetComponent<GridStat>().x + "x; " + path[i].GetComponent<GridStat>().y + "y");
-        }*/
 
         return path;
     }
@@ -244,9 +265,10 @@ public class GridBehaviour : MonoBehaviour
         int step;
         int x = endX;
         int y = endY;
+
         List<GameObject> tempList = new List<GameObject>();
         path.Clear();
-        if (gridArray[endX, endY] && gridArray[endX,endY].GetComponent<GridStat>().visited > 0)
+        if (gridArray[x, y] && gridArray[x,y].GetComponent<GridStat>().visited > 0)
         {
             path.Add(gridArray[x, y]);
             step = gridArray[x, y].GetComponent<GridStat>().visited - 1;
@@ -275,7 +297,7 @@ public class GridBehaviour : MonoBehaviour
             {
                 tempList.Add(gridArray[x - 1, y]);
             }
-            GameObject tempObj = FindClosest(gridArray[endX, endY].transform, tempList);
+            GameObject tempObj = FindClosest(gridArray[x, y].transform, tempList);
             path.Add(tempObj);
             x = tempObj.GetComponent<GridStat>().x;
             y = tempObj.GetComponent<GridStat>().y;

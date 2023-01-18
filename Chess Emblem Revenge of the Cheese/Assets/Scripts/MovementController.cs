@@ -99,6 +99,15 @@ public class MovementController : MonoBehaviour
     {
         path = gridBehaviour.GetPath(this, x, y);
 
+        /*print("1");
+        for (int i = 0; i < path.Count; i++)
+        {
+            if (path == null)
+            {
+                print("2");
+                path = gridBehaviour.GetPath(this, path[path.Count - 1].GetComponent<GridStat>().x, path[path.Count - 1].GetComponent<GridStat>().y);
+            }
+        }*/
         if (path.Count > unitStats.spd)
         {
             path.RemoveRange(0, path.Count - unitStats.spd - 1);
@@ -138,12 +147,7 @@ public class MovementController : MonoBehaviour
     public void ShowPathToMouse(int mouseX, int mouseY, bool isEnemy = false)
     {
         List<GameObject> tmpPath = gridBehaviour.GetPath(this, mouseX, mouseY);
-
-        if (isEnemy)
-        {
-            tmpPath.RemoveRange(0, path.Count - unitStats.spd - 1 - unitStats.atkRange);
-        }
-
+        
         if (tmpPath.Count > unitStats.spd)
         {
             tmpPath.RemoveRange(0, tmpPath.Count - unitStats.spd - 1);

@@ -21,17 +21,14 @@ public class PlayerController : MonoBehaviour
 
             if (hit.transform != null && hit.transform.GetComponent<GridStat>())
             {
-                if (hit.transform.GetComponent<GridStat>().objektOnTile == null)
+                GridStat tmpGridStat = hit.transform.GetComponent<GridStat>();
+                if (hit.transform.GetComponent<MovementController>() != null && hit.transform.GetComponent<MovementController>().team != playersTeam)
                 {
-                    GridStat tmpGridStat = hit.transform.GetComponent<GridStat>();
-                    if (hit.transform.GetComponent<MovementController>() != null && hit.transform.GetComponent<MovementController>().team != playersTeam)
-                    {
-                        selectedUnit.GetComponent<MovementController>().ShowPathToMouse(tmpGridStat.x, tmpGridStat.y, true);
-                    }
-                    else
-                    {
-                        selectedUnit.GetComponent<MovementController>().ShowPathToMouse(tmpGridStat.x, tmpGridStat.y);
-                    }
+                    selectedUnit.GetComponent<MovementController>().ShowPathToMouse(tmpGridStat.x, tmpGridStat.y, true);
+                }
+                else
+                {
+                    selectedUnit.GetComponent<MovementController>().ShowPathToMouse(tmpGridStat.x, tmpGridStat.y);
                 }
             }
         }
