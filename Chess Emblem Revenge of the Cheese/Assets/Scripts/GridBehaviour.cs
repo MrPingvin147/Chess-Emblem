@@ -7,7 +7,7 @@ public class GridBehaviour : MonoBehaviour
 {
     public int rows = 15;
     public int columns = 15;
-    public float scale = 1;
+    public float scale { private set; get; } = 1f;
     public GameObject gridPrefab;
     public Vector3 leftBottomLocation = Vector3.zero;
     public GameObject gridSqaure;
@@ -166,7 +166,8 @@ public class GridBehaviour : MonoBehaviour
         endX = desiredX;
         endY = desiredY;
 
-        if (gridArray[endX, endY].GetComponent<GridStat>().objektOnTile != null)
+        //if X and Y is on an enemy then find the closest sqaure around the unit
+        if (gridArray[endX, endY].GetComponent<GridStat>().objektOnTile && Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY].GetComponent<GridStat>().objektOnTile.transform.position) > scale)
         {
             float[] tmpArray = new float[4];
             try { tmpArray[0] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX + 1, endY].transform.position); }
@@ -189,6 +190,8 @@ public class GridBehaviour : MonoBehaviour
             if (minValue == 1) { endX = endX - 1; }
             if (minValue == 2) { endY = endY + 1; }
             if (minValue == 3) { endY = endY - 1; }
+
+            if (Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY].transform.position) <= scale - 0.1f) { return new List<GameObject>(); }
         }
 
         SetDistance();
@@ -275,7 +278,6 @@ public class GridBehaviour : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Jeg kan ikke nå min destination");
             return;
         }
 

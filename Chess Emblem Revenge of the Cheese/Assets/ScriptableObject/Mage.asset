@@ -17,3 +17,4 @@ MonoBehaviour:
   maxDmg: 4
   hp: 4
   spd: 2
+  splashDamage: 1

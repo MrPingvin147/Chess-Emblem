@@ -10,4 +10,5 @@ public class UnitStats : ScriptableObject
     public int maxDmg;
     public int hp;
     public int spd;
+    public bool splashDamage;
 }

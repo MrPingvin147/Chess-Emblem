@@ -4,18 +4,22 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(LineRenderer))]
+[RequireComponent(typeof(LineRenderer)), RequireComponent(typeof(CombatController))]
 public class MovementController : MonoBehaviour
 {
     public int gridXPosition { get; private set; } = 14;
     public int gridYPosition { get; private set; } = 14;
     public float yOffset = 0.5f;
 
+    [HideInInspector]
     public Vector2 startGridPosition;
 
+    [HideInInspector]
     public int targetLocationX = 5;
+    [HideInInspector]
     public int targetLocationY = 5;
 
+    [HideInInspector]
     public float speed = 0.5f;
 
     private List<GameObject> path;
@@ -23,13 +27,15 @@ public class MovementController : MonoBehaviour
     GridBehaviour gridBehaviour;
 
     public string team;
+    [HideInInspector]
     public Material selectedMaterial;
+    [HideInInspector]
     public Material deSelectedMaterial;
     MeshRenderer meshRenderer;
-    RaycastHit tmpHit;
 
     public Material arrowMat;
     LineRenderer lineRenderer;
+    CombatController combatController;
 
     public UnitStats unitStats;
 
@@ -37,6 +43,7 @@ public class MovementController : MonoBehaviour
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
+        combatController = GetComponent<CombatController>();
 
         lineRenderer.startWidth = 0.3f;
         lineRenderer.positionCount = 0;
@@ -78,50 +85,39 @@ public class MovementController : MonoBehaviour
         RemoveArrowPath();
     }
 
-    public void MoveToLocation(int x, int y)
+    public void MoveToLocation(int x, int y, GameObject objectOnTile = null)
     {
         path = gridBehaviour.GetPath(this, x, y);
 
-        if (path.Count > unitStats.spd)
+        if (path.Count <= 0)
         {
-            path.RemoveRange(0, path.Count - unitStats.spd - 1);
-        }
-        x = path[0].GetComponent<GridStat>().x;
-        y = path[0].GetComponent<GridStat>().y;
-
-        ShowPathToMouse(x, y);
-
-        StartCoroutine(LerpPosition(x,y,speed));
-        
-    }
-
-    public void AttackAtLocation(int x, int y)
-    {
-        path = gridBehaviour.GetPath(this, x, y);
-
-        /*print("1");
-        for (int i = 0; i < path.Count; i++)
-        {
-            if (path == null)
+            if (objectOnTile)
             {
-                print("2");
-                path = gridBehaviour.GetPath(this, path[path.Count - 1].GetComponent<GridStat>().x, path[path.Count - 1].GetComponent<GridStat>().y);
+                if (Vector3.Distance(gridBehaviour.gridArray[x, y].transform.position, gridBehaviour.gridArray[objectOnTile.GetComponent<MovementController>().gridXPosition, objectOnTile.GetComponent<MovementController>().gridYPosition].transform.position) <= gridBehaviour.scale)
+                {
+                    print("Attacker: " + gameObject.name + " Attacked: " + objectOnTile.name);
+
+                    CombatController cmController = objectOnTile.GetComponent<CombatController>();
+
+                    cmController.TakeDamage(combatController.GetDamageValue());
+                }
             }
-        }*/
+            return;
+        }
+
         if (path.Count > unitStats.spd)
         {
             path.RemoveRange(0, path.Count - unitStats.spd - 1);
         }
-
         x = path[0].GetComponent<GridStat>().x;
         y = path[0].GetComponent<GridStat>().y;
 
         ShowPathToMouse(x, y);
 
-        StartCoroutine(LerpPosition(x, y, speed));
+        StartCoroutine(LerpPosition(x,y,speed, objectOnTile));
     }
 
-    IEnumerator LerpPosition(int x, int y, float duration)
+    IEnumerator LerpPosition(int x, int y, float duration, GameObject objectOnTile)
     {
         gridBehaviour.gridArray[gridXPosition, gridYPosition].GetComponent<GridStat>().objektOnTile = null;
         gridBehaviour.gridArray[x, y].GetComponent<GridStat>().objektOnTile = gameObject;
@@ -141,7 +137,20 @@ public class MovementController : MonoBehaviour
             gridXPosition = path[0].GetComponent<GridStat>().x;
             gridYPosition = path[0].GetComponent<GridStat>().y;
         }
+
         RemoveArrowPath();
+
+        if (objectOnTile)
+        {
+            if (Vector3.Distance(gridBehaviour.gridArray[x, y].transform.position, gridBehaviour.gridArray[objectOnTile.GetComponent<MovementController>().gridXPosition, objectOnTile.GetComponent<MovementController>().gridYPosition].transform.position) <= gridBehaviour.scale)
+            {
+                print("Attacker: " + gameObject.name + " Attacked: " + objectOnTile.name);
+
+                CombatController cmController = objectOnTile.GetComponent<CombatController>();
+
+                cmController.TakeDamage(combatController.GetDamageValue());
+            }
+        }
     }
 
     public void ShowPathToMouse(int mouseX, int mouseY, bool isEnemy = false)

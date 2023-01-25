@@ -34,6 +34,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnSpace()
+    {
+        print("hej");
+        selectedUnit.GetComponent<CombatController>().TakeDamage(2);
+    }
     public void OnFire(InputValue value)
     {
         if (playersTurn)
@@ -50,26 +55,27 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        
 
         if (unitSelected)
         {
-            if (hit.transform.GetComponent<GridStat>().objektOnTile != null)
+            if (hit.transform.GetComponent<GridStat>().objektOnTile)
             {
-                if (hit.transform.GetComponent<MovementController>() != null)
+                GameObject objectOnTile = hit.transform.GetComponent<GridStat>().objektOnTile;
+
+
+                if (objectOnTile.GetComponent<MovementController>().team == playersTeam)
                 {
-                    if (hit.transform.GetComponent<MovementController>().team == playersTeam)
-                    {
-                        SelectUnit(hit);
-                        return;
-                    }
-                    else if (hit.transform.GetComponent<MovementController>().team != playersTeam)
-                    {
-                        AttackUnit(hit);
-                        return;
-                    }
+                    print("Selected: " + hit.transform.GetComponent<GridStat>().objektOnTile.name);
+                    SelectUnit(hit);
+                    return;
+                }
+                else if (objectOnTile.GetComponent<MovementController>().team != playersTeam)
+                {
+                    MoveUnit(hit, true);
+                    return;
                 }
             }
-
             MoveUnit(hit);
             return;
         }
@@ -110,26 +116,42 @@ public class PlayerController : MonoBehaviour
         unitSelected = true;
     }
 
-    private void MoveUnit(RaycastHit hit)
+    private void MoveUnit(RaycastHit hit, bool attack = false)
     {
         int x = hit.transform.GetComponent<GridStat>().x;
         int y = hit.transform.GetComponent<GridStat>().y;
 
-        selectedUnit.MoveToLocation(x, y);
+        if (attack)
+        {
+            selectedUnit.MoveToLocation(x, y, hit.transform.GetComponent<GridStat>().objektOnTile);
+        }
+        else
+        {
+            selectedUnit.MoveToLocation(x, y);
+        }
         unitSelected = false;
         selectedUnit.DeselectUnit();
         selectedUnit = null;
     }
 
-    private void AttackUnit(RaycastHit hit)
+    public void OnUnitDeath(GameObject unit)
     {
-        int x = hit.transform.GetComponent<GridStat>().x;
-        int y = hit.transform.GetComponent<GridStat>().y;
+        if (selectedUnit == unit.GetComponent<MovementController>())
+        {
+            unitSelected = false;
+            selectedUnit.DeselectUnit();
+            selectedUnit = null;
+        }
+    }
 
-        selectedUnit.AttackAtLocation(x, y);
-        unitSelected = false;
-        selectedUnit.DeselectUnit();
-        selectedUnit = null;
+    private void OnEnable()
+    {
+        CombatController.onDie += OnUnitDeath;
+    }
+
+    private void OnDisable()
+    {
+        CombatController.onDie -= OnUnitDeath;
     }
 
 }
