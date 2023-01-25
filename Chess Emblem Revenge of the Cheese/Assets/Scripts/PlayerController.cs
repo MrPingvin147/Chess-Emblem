@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnSpace()
     {
-        print("hej");
         selectedUnit.GetComponent<CombatController>().TakeDamage(2);
     }
     public void OnFire(InputValue value)

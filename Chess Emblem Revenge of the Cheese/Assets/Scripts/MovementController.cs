@@ -87,13 +87,15 @@ public class MovementController : MonoBehaviour
 
     public void MoveToLocation(int x, int y, GameObject objectOnTile = null)
     {
+        int movementLeft = unitStats.spd;
+
         path = gridBehaviour.GetPath(this, x, y);
 
-        if (path.Count <= 0)
+        if (path.Count <= 0 || path.Count <= unitStats.atkRange && unitStats.atkRange != 0 && objectOnTile)
         {
             if (objectOnTile)
             {
-                if (Vector3.Distance(gridBehaviour.gridArray[x, y].transform.position, gridBehaviour.gridArray[objectOnTile.GetComponent<MovementController>().gridXPosition, objectOnTile.GetComponent<MovementController>().gridYPosition].transform.position) <= gridBehaviour.scale)
+                if (Vector3.Distance(gridBehaviour.gridArray[x, y].transform.position, gridBehaviour.gridArray[objectOnTile.GetComponent<MovementController>().gridXPosition, objectOnTile.GetComponent<MovementController>().gridYPosition].transform.position) <= gridBehaviour.scale + unitStats.atkRange * gridBehaviour.scale)
                 {
                     print("Attacker: " + gameObject.name + " Attacked: " + objectOnTile.name);
 
@@ -105,12 +107,30 @@ public class MovementController : MonoBehaviour
             return;
         }
 
-        if (path.Count > unitStats.spd)
+        if (path.Count > movementLeft)
         {
-            path.RemoveRange(0, path.Count - unitStats.spd - 1);
+            path.RemoveRange(0, path.Count - movementLeft - 1);
+            movementLeft -= path.Count - 1;
         }
+
         x = path[0].GetComponent<GridStat>().x;
         y = path[0].GetComponent<GridStat>().y;
+
+        if (objectOnTile)
+        {
+            int sum;
+            int pathPosition = 0;
+            for (int i = 0; i < path.Count; i++)
+            {
+                sum = Mathf.Abs(path[i].GetComponent<GridStat>().x - objectOnTile.GetComponent<MovementController>().gridXPosition) + Mathf.Abs(path[i].GetComponent<GridStat>().y - objectOnTile.GetComponent<MovementController>().gridYPosition);
+                if (sum == unitStats.atkRange)
+                {
+                    pathPosition = i;
+                    break;
+                }
+            }
+            path.RemoveRange(0, pathPosition);
+        }
 
         ShowPathToMouse(x, y);
 
@@ -142,7 +162,9 @@ public class MovementController : MonoBehaviour
 
         if (objectOnTile)
         {
-            if (Vector3.Distance(gridBehaviour.gridArray[x, y].transform.position, gridBehaviour.gridArray[objectOnTile.GetComponent<MovementController>().gridXPosition, objectOnTile.GetComponent<MovementController>().gridYPosition].transform.position) <= gridBehaviour.scale)
+            int sum = Mathf.Abs(x- objectOnTile.GetComponent<MovementController>().gridXPosition) + Mathf.Abs(y- objectOnTile.GetComponent<MovementController>().gridYPosition);
+
+            if (sum <= unitStats.atkRange || unitStats.atkRange == 0)
             {
                 print("Attacker: " + gameObject.name + " Attacked: " + objectOnTile.name);
 
@@ -157,6 +179,7 @@ public class MovementController : MonoBehaviour
     {
         List<GameObject> tmpPath = gridBehaviour.GetPath(this, mouseX, mouseY);
         
+
         if (tmpPath.Count > unitStats.spd)
         {
             tmpPath.RemoveRange(0, tmpPath.Count - unitStats.spd - 1);
