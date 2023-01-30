@@ -19,7 +19,6 @@ public class MovementController : MonoBehaviour
     [HideInInspector]
     public int targetLocationY = 5;
 
-    [HideInInspector]
     public float speed = 0.5f;
 
     private List<GameObject> path;

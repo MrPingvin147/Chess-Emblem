@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     bool unitSelected = false;
     MovementController selectedUnit;
 
+    [SerializeField]
     string playersTeam = "white";
 
     public LayerMask groundLayer;
