@@ -66,7 +66,6 @@ public class PlayerController : MonoBehaviour
 
                 if (objectOnTile.GetComponent<MovementController>().team == playersTeam)
                 {
-                    print("Selected: " + hit.transform.GetComponent<GridStat>().objektOnTile.name);
                     SelectUnit(hit);
                     return;
                 }
@@ -110,7 +109,6 @@ public class PlayerController : MonoBehaviour
             selectedUnit.DeselectUnit();
         }
 
-        Debug.Log(hit.transform.GetComponent<GridStat>().objektOnTile.name);
         selectedUnit = hit.transform.GetComponent<GridStat>().objektOnTile.GetComponent<MovementController>();
         selectedUnit.SelectUnit();
         unitSelected = true;

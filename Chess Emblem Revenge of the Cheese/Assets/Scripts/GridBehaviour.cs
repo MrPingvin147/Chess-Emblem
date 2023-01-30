@@ -165,9 +165,11 @@ public class GridBehaviour : MonoBehaviour
         startY = unit.gridYPosition;
         endX = desiredX;
         endY = desiredY;
+        int sum = 0;
 
+        sum = Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY);
         //if X and Y is on an enemy then find the closest sqaure around the unit
-        if (gridArray[endX, endY].GetComponent<GridStat>().objektOnTile && Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY].GetComponent<GridStat>().objektOnTile.transform.position) > scale)
+        if (gridArray[endX, endY].GetComponent<GridStat>().objektOnTile && sum > 1)
         {
             float[] tmpArray = new float[4];
             try { tmpArray[0] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX + 1, endY].transform.position); }
@@ -191,7 +193,9 @@ public class GridBehaviour : MonoBehaviour
             if (minValue == 2) { endY = endY + 1; }
             if (minValue == 3) { endY = endY - 1; }
 
-            if (Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY].transform.position) <= scale - 0.1f) { return new List<GameObject>(); }
+            sum = Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY);
+
+            if (sum <= 0.9f) { return new List<GameObject>(); }
         }
 
         SetDistance();

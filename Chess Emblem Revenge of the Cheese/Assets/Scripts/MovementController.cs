@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -87,22 +88,26 @@ public class MovementController : MonoBehaviour
     public void MoveToLocation(int x, int y, GameObject objectOnTile = null)
     {
         int movementLeft = unitStats.spd;
-
+        int sum = 0;
         path = gridBehaviour.GetPath(this, x, y);
 
-        if (path.Count <= 0 || path.Count <= unitStats.atkRange && unitStats.atkRange != 0 && objectOnTile)
+        if (objectOnTile)
         {
-            if (objectOnTile)
+            sum = Mathf.Abs(gridXPosition - objectOnTile.GetComponent<MovementController>().gridXPosition) + Mathf.Abs(gridYPosition - objectOnTile.GetComponent<MovementController>().gridYPosition);
+            
+            if (sum <= unitStats.atkRange || unitStats.atkRange == 0 && sum <= 1)
             {
-                if (Vector3.Distance(gridBehaviour.gridArray[x, y].transform.position, gridBehaviour.gridArray[objectOnTile.GetComponent<MovementController>().gridXPosition, objectOnTile.GetComponent<MovementController>().gridYPosition].transform.position) <= gridBehaviour.scale + unitStats.atkRange * gridBehaviour.scale)
-                {
-                    print("Attacker: " + gameObject.name + " Attacked: " + objectOnTile.name);
+                print("Attacker: " + gameObject.name + " Attacked: " + objectOnTile.name);
 
-                    CombatController cmController = objectOnTile.GetComponent<CombatController>();
+                CombatController cmController = objectOnTile.GetComponent<CombatController>();
 
-                    cmController.TakeDamage(combatController.GetDamageValue());
-                }
+                cmController.TakeDamage(combatController.GetDamageValue());
+                return;
             }
+        }
+
+        if (path.Count <= 0)
+        {
             return;
         }
 
@@ -112,31 +117,30 @@ public class MovementController : MonoBehaviour
             movementLeft -= path.Count - 1;
         }
 
-        x = path[0].GetComponent<GridStat>().x;
-        y = path[0].GetComponent<GridStat>().y;
-
-        if (objectOnTile)
+        if (objectOnTile && unitStats.atkRange != 0)
         {
-            int sum;
             int pathPosition = 0;
-            for (int i = 0; i < path.Count; i++)
+            for (int i = 1; i < path.Count; i++)
             {
                 sum = Mathf.Abs(path[i].GetComponent<GridStat>().x - objectOnTile.GetComponent<MovementController>().gridXPosition) + Mathf.Abs(path[i].GetComponent<GridStat>().y - objectOnTile.GetComponent<MovementController>().gridYPosition);
                 if (sum == unitStats.atkRange)
                 {
                     pathPosition = i;
-                    break;
                 }
             }
             path.RemoveRange(0, pathPosition);
+            movementLeft += pathPosition;
         }
+
+        x = path[0].GetComponent<GridStat>().x;
+        y = path[0].GetComponent<GridStat>().y;
 
         ShowPathToMouse(x, y);
 
-        StartCoroutine(LerpPosition(x,y,speed, objectOnTile));
+        StartCoroutine(LerpPosition(x,y,speed, objectOnTile, movementLeft));
     }
 
-    IEnumerator LerpPosition(int x, int y, float duration, GameObject objectOnTile)
+    IEnumerator LerpPosition(int x, int y, float duration, GameObject objectOnTile, int movementLeft)
     {
         gridBehaviour.gridArray[gridXPosition, gridYPosition].GetComponent<GridStat>().objektOnTile = null;
         gridBehaviour.gridArray[x, y].GetComponent<GridStat>().objektOnTile = gameObject;
@@ -162,8 +166,8 @@ public class MovementController : MonoBehaviour
         if (objectOnTile)
         {
             int sum = Mathf.Abs(x- objectOnTile.GetComponent<MovementController>().gridXPosition) + Mathf.Abs(y- objectOnTile.GetComponent<MovementController>().gridYPosition);
-
-            if (sum <= unitStats.atkRange || unitStats.atkRange == 0)
+            
+            if (sum <= unitStats.atkRange && movementLeft >= 1 || unitStats.atkRange == 0 && sum <= 1 && movementLeft >= 1)
             {
                 print("Attacker: " + gameObject.name + " Attacked: " + objectOnTile.name);
 
