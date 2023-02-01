@@ -11,7 +11,6 @@ public class CombatController : MonoBehaviour
     UnitStats unitStats;
     float currentHealth;
     int minDamage, maxDamage;
-    bool doSplashDamage = false;
     int range;
 
     public delegate void OnDie(GameObject unit);
@@ -33,6 +32,7 @@ public class CombatController : MonoBehaviour
         range = unitStats.atkRange;
     }
 
+    //Retunere en skade værdi mellem minDamage og maxDamage
     public int GetDamageValue()
     {
         int damage = Random.Range(minDamage, maxDamage);
@@ -40,11 +40,21 @@ public class CombatController : MonoBehaviour
         return damage;
     }
 
+    //Retunere en splash skade værdi mellem minDamage og maxDamage divideret med 2
+    public int GetSplashDamageValue()
+    {
+        int damage = Mathf.FloorToInt(Mathf.Min(minDamage/2, maxDamage/2));
+
+        return damage;
+    }
+
+    //Updatere liv værdien på livbaren over units
     public void UpdateHealthbar()
     {
         slider.value = currentHealth;
     }
 
+    //Tager en skade værdi og fjerner det fra unit liv
     public void TakeDamage(float damage)
     {
         if (currentHealth - damage <= 0)
@@ -58,6 +68,7 @@ public class CombatController : MonoBehaviour
         UpdateHealthbar();
     }
 
+    //Kaldes når unit dør
     private void Dead()
     {
         if (onDie!= null)

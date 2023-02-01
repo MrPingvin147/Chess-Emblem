@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Knight
   m_EditorClassIdentifier: 
   atkRange: 0
-  minDmg: 2
-  maxDmg: 3
-  hp: 6
+  minDmg: 20
+  maxDmg: 30
+  hp: 60
   spd: 5
   splashDamage: 0

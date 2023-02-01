@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Konge
   m_EditorClassIdentifier: 
   atkRange: 0
-  minDmg: 1
-  maxDmg: 3
-  hp: 4
+  minDmg: 10
+  maxDmg: 30
+  hp: 40
   spd: 3
   splashDamage: 0

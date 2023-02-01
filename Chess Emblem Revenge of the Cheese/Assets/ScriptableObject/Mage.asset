@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Mage
   m_EditorClassIdentifier: 
   atkRange: 3
-  minDmg: 3
-  maxDmg: 4
-  hp: 4
+  minDmg: 15
+  maxDmg: 20
+  hp: 40
   spd: 2
   splashDamage: 1

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Pawn
   m_EditorClassIdentifier: 
   atkRange: 0
-  minDmg: 1
-  maxDmg: 2
-  hp: 8
+  minDmg: 10
+  maxDmg: 20
+  hp: 80
   spd: 2
   splashDamage: 0

@@ -102,6 +102,43 @@ public class MovementController : MonoBehaviour
                 CombatController cmController = objectOnTile.GetComponent<CombatController>();
 
                 cmController.TakeDamage(combatController.GetDamageValue());
+
+                if (unitStats.splashDamage)
+                {
+                    if (gridBehaviour.gridArray[x + 1, y].GetComponent<GridStat>().objektOnTile)
+                    {
+                        GameObject tmpObject = gridBehaviour.gridArray[x + 1, y].GetComponent<GridStat>().objektOnTile;
+                        if (tmpObject.GetComponent<CombatController>() && tmpObject.GetComponent<MovementController>().team != team)
+                        {
+                            tmpObject.GetComponent<CombatController>().TakeDamage(combatController.GetDamageValue());
+                        }
+                    }
+                    if (gridBehaviour.gridArray[x - 1, y].GetComponent<GridStat>().objektOnTile)
+                    {
+                        GameObject tmpObject = gridBehaviour.gridArray[x - 1, y].GetComponent<GridStat>().objektOnTile;
+                        if (tmpObject.GetComponent<CombatController>() && tmpObject.GetComponent<MovementController>().team != team)
+                        {
+                            tmpObject.GetComponent<CombatController>().TakeDamage(combatController.GetDamageValue());
+                        }
+                    }
+                    if (gridBehaviour.gridArray[x, y + 1].GetComponent<GridStat>().objektOnTile)
+                    {
+                        GameObject tmpObject = gridBehaviour.gridArray[x, y + 1].GetComponent<GridStat>().objektOnTile;
+                        if (tmpObject.GetComponent<CombatController>() && tmpObject.GetComponent<MovementController>().team != team)
+                        {
+                            tmpObject.GetComponent<CombatController>().TakeDamage(combatController.GetDamageValue());
+                        }
+                    }
+                    if (gridBehaviour.gridArray[x, y - 1].GetComponent<GridStat>().objektOnTile)
+                    {
+                        GameObject tmpObject = gridBehaviour.gridArray[x, y - 1].GetComponent<GridStat>().objektOnTile;
+                        if (tmpObject.GetComponent<CombatController>() && tmpObject.GetComponent<MovementController>().team != team)
+                        {
+                            tmpObject.GetComponent<CombatController>().TakeDamage(combatController.GetDamageValue());
+                        }
+                    }
+                }
+
                 return;
             }
         }
@@ -169,11 +206,49 @@ public class MovementController : MonoBehaviour
             
             if (sum <= unitStats.atkRange && movementLeft >= 1 || unitStats.atkRange == 0 && sum <= 1 && movementLeft >= 1)
             {
-                print("Attacker: " + gameObject.name + " Attacked: " + objectOnTile.name);
+                print(gameObject.name + " moved to attack " + objectOnTile.name);
 
                 CombatController cmController = objectOnTile.GetComponent<CombatController>();
 
                 cmController.TakeDamage(combatController.GetDamageValue());
+
+                if (unitStats.splashDamage)
+                {
+                    x = objectOnTile.GetComponent<MovementController>().gridXPosition;
+                    y = objectOnTile.GetComponent<MovementController>().gridYPosition;
+                    if (gridBehaviour.gridArray[x + 1, y].GetComponent<GridStat>().objektOnTile)
+                    {
+                        GameObject tmpObject = gridBehaviour.gridArray[x + 1, y].GetComponent<GridStat>().objektOnTile;
+                        if (tmpObject.GetComponent<CombatController>() && tmpObject.GetComponent<MovementController>().team != team)
+                        {
+                            tmpObject.GetComponent<CombatController>().TakeDamage(combatController.GetDamageValue());
+                        }
+                    }
+                    if (gridBehaviour.gridArray[x - 1, y].GetComponent<GridStat>().objektOnTile)
+                    {
+                        GameObject tmpObject = gridBehaviour.gridArray[x - 1, y].GetComponent<GridStat>().objektOnTile;
+                        if (tmpObject.GetComponent<CombatController>() && tmpObject.GetComponent<MovementController>().team != team)
+                        {
+                            tmpObject.GetComponent<CombatController>().TakeDamage(combatController.GetDamageValue());
+                        }
+                    }
+                    if (gridBehaviour.gridArray[x, y + 1].GetComponent<GridStat>().objektOnTile)
+                    {
+                        GameObject tmpObject = gridBehaviour.gridArray[x, y + 1].GetComponent<GridStat>().objektOnTile;
+                        if (tmpObject.GetComponent<CombatController>() && tmpObject.GetComponent<MovementController>().team != team)
+                        {
+                            tmpObject.GetComponent<CombatController>().TakeDamage(combatController.GetDamageValue());
+                        }
+                    }
+                    if (gridBehaviour.gridArray[x, y - 1].GetComponent<GridStat>().objektOnTile)
+                    {
+                        GameObject tmpObject = gridBehaviour.gridArray[x, y - 1].GetComponent<GridStat>().objektOnTile;
+                        if (tmpObject.GetComponent<CombatController>() && tmpObject.GetComponent<MovementController>().team != team)
+                        {
+                            tmpObject.GetComponent<CombatController>().TakeDamage(combatController.GetDamageValue());
+                        }
+                    }
+                }
             }
         }
     }
