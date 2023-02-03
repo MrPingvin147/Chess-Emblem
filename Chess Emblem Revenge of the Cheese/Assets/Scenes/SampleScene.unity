@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 3843423}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -290,7 +290,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: 0.42261827, y: 0, z: 0, w: 0.9063079}
-  m_LocalPosition: {x: 8.5, y: 10.03, z: -2.97}
+  m_LocalPosition: {x: 9.76, y: 11.04, z: -3.87}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -495,11 +495,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fda64f41104d4b445b10774f2b2b7d56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rows: 15
-  columns: 15
+  rows: 14
+  columns: 14
+  scale: 1.5
   gridPrefab: {fileID: 1686021177304871604, guid: ebee340de387f334f9ac44e044abd8fb,
     type: 3}
-  leftBottomLocation: {x: 0, y: 0, z: 0}
   gridSqaure: {fileID: 1682471895263422204, guid: f81c3498e6cdb29489d7227ce9564262,
     type: 3}
   startX: 0

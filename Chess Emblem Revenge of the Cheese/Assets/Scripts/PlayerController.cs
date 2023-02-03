@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public bool playersTurn = false;
+
+    private bool canInteract = true;
+
     bool unitSelected = false;
     MovementController selectedUnit;
 
@@ -56,6 +59,10 @@ public class PlayerController : MonoBehaviour
             return;
         }
         
+        if (!canInteract)
+        {
+            return;
+        }
 
         if (unitSelected)
         {
@@ -79,7 +86,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (hit.transform.GetComponent<GridStat>().objektOnTile != null)
+        if (hit.transform.GetComponent<GridStat>().objektOnTile != null && hit.transform.GetComponent<GridStat>().objektOnTile.GetComponent<MovementController>().team == playersTeam)
         {
             SelectUnit(hit);
             return;
@@ -116,6 +123,8 @@ public class PlayerController : MonoBehaviour
 
     private void MoveUnit(RaycastHit hit, bool attack = false)
     {
+        canInteract = false;
+
         int x = hit.transform.GetComponent<GridStat>().x;
         int y = hit.transform.GetComponent<GridStat>().y;
 
@@ -130,6 +139,12 @@ public class PlayerController : MonoBehaviour
         unitSelected = false;
         selectedUnit.DeselectUnit();
         selectedUnit = null;
+    }
+
+    public IEnumerator EnableInteract()
+    {
+        yield return new WaitForSeconds(0.1f);
+        canInteract = true;
     }
 
     public void OnUnitDeath(GameObject unit)

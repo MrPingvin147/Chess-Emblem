@@ -39,9 +39,12 @@ public class MovementController : MonoBehaviour
 
     public UnitStats unitStats;
 
+    private PlayerController playerController;
+
     // Start is called before the first frame update
     void Start()
     {
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         lineRenderer = GetComponent<LineRenderer>();
         combatController = GetComponent<CombatController>();
 
@@ -251,6 +254,8 @@ public class MovementController : MonoBehaviour
                 }
             }
         }
+
+        StartCoroutine(playerController.EnableInteract()); 
     }
 
     public void ShowPathToMouse(int mouseX, int mouseY, bool isEnemy = false)

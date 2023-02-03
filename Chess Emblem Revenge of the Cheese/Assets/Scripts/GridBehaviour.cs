@@ -7,9 +7,9 @@ public class GridBehaviour : MonoBehaviour
 {
     public int rows = 15;
     public int columns = 15;
-    public float scale { private set; get; } = 1f;
+    public float scale = 1f;
+    private Vector3 leftBottomLocation = Vector3.zero;
     public GameObject gridPrefab;
-    public Vector3 leftBottomLocation = Vector3.zero;
     public GameObject gridSqaure;
     public GameObject[,] gridArray;
     public int startX = 0;
@@ -66,36 +66,36 @@ public class GridBehaviour : MonoBehaviour
             for (int j = 0; j < rows; j++)
             {
                 //Pawns
-                if (i == 0 || i == 2 || i == 4 || i == 6 || i == 7 || i == 10 || i == 12 || i == 14)
+                if (i == 0 || i == 2 || i == 4 || i == 6 || i == 7 || i == 9 || i == 11 || i == columns - 1)
                 {
-                    if (j == 1 || j == 13)
+                    if (j == 1 || j == columns - 2)
                     {
                         positionMatrix[i, j] = units[0];
                     }
                 }
 
                 //Knights
-                if (i == 0 || i == 14)
+                if (i == 0 || i == columns - 1)
                 {
-                    if (j == 0 || j == 14)
+                    if (j == 0 || j == columns - 1)
                     {
                         positionMatrix[i, j] = units[1];
                     }
                 }
 
                 //Archer
-                if (i == 2 || i == 12)
+                if (i == 2 || i == 11)
                 {
-                    if (j == 0 || j == 14)
+                    if (j == 0 || j == columns - 1)
                     {
                         positionMatrix[i, j] = units[2];
                     }
                 }
 
                 //Mage
-                if (i == 4 || i == 10)
+                if (i == 4 || i == 9)
                 {
-                    if (j == 0 || j == 14)
+                    if (j == 0 || j == columns - 1)
                     {
                         positionMatrix[i, j] = units[3];
                     }
@@ -104,7 +104,7 @@ public class GridBehaviour : MonoBehaviour
                 //Konge
                 if (i == 6)
                 {
-                    if (j == 0 || j == 14)
+                    if (j == 0 || j == columns - 1)
                     {
                         positionMatrix[i, j] = units[4];
                     }
@@ -113,7 +113,7 @@ public class GridBehaviour : MonoBehaviour
                 //Commander
                 if (i == 7)
                 {
-                    if (j == 0 || j == 14)
+                    if (j == 0 || j == columns - 1)
                     {
                         positionMatrix[i, j] = units[5];
                     }
@@ -230,7 +230,7 @@ public class GridBehaviour : MonoBehaviour
 
                 Instantiate(gridSqaure, tmpPos, Quaternion.Euler(new Vector3(0, 0, 0)), gameObject.transform);
 
-                if (i == 14)
+                if (i == columns - 1)
                 {
                     tmpPos.x += distance * 2;
                     Instantiate(gridSqaure, tmpPos, Quaternion.Euler(new Vector3(0, 0, 0)), gameObject.transform);
