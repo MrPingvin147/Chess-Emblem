@@ -22,8 +22,21 @@ public class PlayerController : MonoBehaviour
         if (unitSelected)
         {
             RaycastHit hit = MouseRayCast();
+            GameObject lastHit = null;
 
-            if (hit.transform != null && hit.transform.GetComponent<GridStat>())
+            if (hit.transform == null)
+            {
+                return;
+            }
+
+            if (hit.transform.gameObject == lastHit)
+            {
+                return;
+            }
+
+            lastHit = hit.transform.gameObject;
+
+            if (hit.transform.GetComponent<GridStat>())
             {
                 GridStat tmpGridStat = hit.transform.GetComponent<GridStat>();
                 if (hit.transform.GetComponent<MovementController>() != null && hit.transform.GetComponent<MovementController>().team != playersTeam)

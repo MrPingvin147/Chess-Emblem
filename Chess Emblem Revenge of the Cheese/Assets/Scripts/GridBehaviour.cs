@@ -172,26 +172,40 @@ public class GridBehaviour : MonoBehaviour
         if (gridArray[endX, endY].GetComponent<GridStat>().objektOnTile && sum > 1)
         {
             float[] tmpArray = new float[4];
-            try { tmpArray[0] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX + 1, endY].transform.position); }
+            /*try { if (gridArray[endX + 1, endY].GetComponent<GridStat>().objektOnTile) { tmpArray[0] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX + 1, endY].transform.position); } }
             catch { tmpArray[0] = 1000000; }
-            try { tmpArray[1] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX - 1, endY].transform.position); }
+            try { if (gridArray[endX - 1, endY].GetComponent<GridStat>().objektOnTile) { tmpArray[1] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX - 1, endY].transform.position); } }
             catch { tmpArray[1] = 1000000; }
-            try { tmpArray[2] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY + 1].transform.position); }
+            try { if (gridArray[endX, endY + 1].GetComponent<GridStat>().objektOnTile) { tmpArray[2] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY + 1].transform.position); } }
             catch { tmpArray[2] = 1000000; }
-            try { tmpArray[3] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY - 1].transform.position); }
+            try { if (gridArray[endX, endY - 1].GetComponent<GridStat>().objektOnTile) { tmpArray[3] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY - 1].transform.position); } }
+            catch { tmpArray[3] = 1000000; }*/
+
+            try { if (gridArray[endX + 1, endY].GetComponent<GridStat>().objektOnTile == null) { tmpArray[0] = Mathf.Abs(startX - endX + 1) + Mathf.Abs(startY - endY); }
+            else { tmpArray[0] = 1000000; } }
+            catch { tmpArray[0] = 1000000; }
+            try { if (gridArray[endX - 1, endY].GetComponent<GridStat>().objektOnTile == null) { tmpArray[1] = Mathf.Abs(startX - endX - 1) + Mathf.Abs(startY - endY); } 
+            else { tmpArray[1] = 1000000; } }
+            catch { tmpArray[1] = 1000000; }
+            try { if (gridArray[endX, endY + 1].GetComponent<GridStat>().objektOnTile == null) { tmpArray[2] = Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY + 1); } 
+            else { tmpArray[2] = 1000000; } }
+            catch { tmpArray[2] = 1000000; }
+            try { if (gridArray[endX, endY - 1].GetComponent<GridStat>().objektOnTile == null) { tmpArray[3] = Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY - 1); } 
+            else { tmpArray[3] = 1000000; } }
             catch { tmpArray[3] = 1000000; }
 
-            float minValue = tmpArray.Min<float>();
-
+            float minValue = 100000;
+            int tmpInt = -10;
             for (int i = 0; i < 4; i++)
             {
-                if (minValue == tmpArray[i]) { minValue = i; }
+                if (minValue > tmpArray[i]) { tmpInt = i; }
             }
 
-            if (minValue == 0) { endX = endX + 1; }
-            if (minValue == 1) { endX = endX - 1; }
-            if (minValue == 2) { endY = endY + 1; }
-            if (minValue == 3) { endY = endY - 1; }
+            if (tmpInt == 0) { endX = endX + 1; }
+            if (tmpInt == 1) { endX = endX - 1; }
+            if (tmpInt == 2) { endY = endY + 1; }
+            if (tmpInt == 3) { endY = endY - 1; }
+
 
             sum = Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY);
 
