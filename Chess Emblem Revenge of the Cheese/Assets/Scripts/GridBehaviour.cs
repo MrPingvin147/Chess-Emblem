@@ -168,6 +168,7 @@ public class GridBehaviour : MonoBehaviour
         int sum = 0;
 
         sum = Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY);
+        
         //if X and Y is on an enemy then find the closest sqaure around the unit
         if (gridArray[endX, endY].GetComponent<GridStat>().objektOnTile && sum > 1)
         {
@@ -181,24 +182,29 @@ public class GridBehaviour : MonoBehaviour
             try { if (gridArray[endX, endY - 1].GetComponent<GridStat>().objektOnTile) { tmpArray[3] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY - 1].transform.position); } }
             catch { tmpArray[3] = 1000000; }*/
 
-            try { if (gridArray[endX + 1, endY].GetComponent<GridStat>().objektOnTile == null) { tmpArray[0] = Mathf.Abs(startX - endX + 1) + Mathf.Abs(startY - endY); }
-            else { tmpArray[0] = 1000000; } }
-            catch { tmpArray[0] = 1000000; }
-            try { if (gridArray[endX - 1, endY].GetComponent<GridStat>().objektOnTile == null) { tmpArray[1] = Mathf.Abs(startX - endX - 1) + Mathf.Abs(startY - endY); } 
-            else { tmpArray[1] = 1000000; } }
-            catch { tmpArray[1] = 1000000; }
-            try { if (gridArray[endX, endY + 1].GetComponent<GridStat>().objektOnTile == null) { tmpArray[2] = Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY + 1); } 
-            else { tmpArray[2] = 1000000; } }
-            catch { tmpArray[2] = 1000000; }
-            try { if (gridArray[endX, endY - 1].GetComponent<GridStat>().objektOnTile == null) { tmpArray[3] = Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY - 1); } 
-            else { tmpArray[3] = 1000000; } }
-            catch { tmpArray[3] = 1000000; }
+            try { if (gridArray[endX + 1, endY].GetComponent<GridStat>().objektOnTile == null) { tmpArray[0] = Mathf.Abs(startX - endX - 1) + Mathf.Abs(startY - endY); }
+            else { tmpArray[0] = 50; } }
+            catch { tmpArray[0] = 100; }
+
+            try { if (gridArray[endX - 1, endY].GetComponent<GridStat>().objektOnTile == null) { tmpArray[1] = Mathf.Abs(startX - endX + 1) + Mathf.Abs(startY - endY); } 
+            else { tmpArray[1] = 51; } }
+            catch { tmpArray[1] = 101; }
+
+            try { if (gridArray[endX, endY + 1].GetComponent<GridStat>().objektOnTile == null) { tmpArray[2] = Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY - 1); } 
+            else { tmpArray[2] = 52; } }
+            catch { tmpArray[2] = 102; }
+
+            try { if (gridArray[endX, endY - 1].GetComponent<GridStat>().objektOnTile == null) { tmpArray[3] = Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY + 1); } 
+            else { tmpArray[3] = 53; } }
+            catch { tmpArray[3] = 103; }
+
+            print(tmpArray[0] + ": " + tmpArray[1] + ": " + tmpArray[2] + ": " + tmpArray[3]);
 
             float minValue = 100000;
             int tmpInt = -10;
             for (int i = 0; i < 4; i++)
             {
-                if (minValue > tmpArray[i]) { tmpInt = i; }
+                if (tmpArray[i] < minValue) { tmpInt = i; minValue = tmpArray[i]; }
             }
 
             if (tmpInt == 0) { endX = endX + 1; }
