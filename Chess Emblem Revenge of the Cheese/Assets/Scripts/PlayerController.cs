@@ -12,10 +12,13 @@ public class PlayerController : MonoBehaviour
     bool unitSelected = false;
     MovementController selectedUnit;
 
+    public UISelect UIScript;
+
     [SerializeField]
     string playersTeam = "white";
 
     public LayerMask groundLayer;
+
 
     private void Update()
     {
@@ -102,6 +105,7 @@ public class PlayerController : MonoBehaviour
         if (hit.transform.GetComponent<GridStat>().objektOnTile != null && hit.transform.GetComponent<GridStat>().objektOnTile.GetComponent<MovementController>().team == playersTeam)
         {
             SelectUnit(hit);
+            
             return;
         }
         else
@@ -132,6 +136,7 @@ public class PlayerController : MonoBehaviour
         selectedUnit = hit.transform.GetComponent<GridStat>().objektOnTile.GetComponent<MovementController>();
         selectedUnit.SelectUnit();
         unitSelected = true;
+        UIScript.ChangeStatUI(hit.transform.GetComponent<GridStat>().objektOnTile.GetComponent<CombatController>().unitStats, (int)hit.transform.GetComponent<GridStat>().objektOnTile.GetComponent<CombatController>().currentHealth);
     }
 
     private void MoveUnit(RaycastHit hit, bool attack = false)

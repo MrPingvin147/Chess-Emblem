@@ -8,8 +8,8 @@ public class CombatController : MonoBehaviour
 {
     MovementController movementController;
     Slider slider;
-    UnitStats unitStats;
-    float currentHealth;
+    public UnitStats unitStats;
+    public float currentHealth;
     int minDamage, maxDamage;
     int range;
 
