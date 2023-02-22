@@ -138,6 +138,8 @@ public class MovementController : MonoBehaviour
                     }
                 }
 
+                StartCoroutine(playerController.EnableInteract());
+
                 return;
             }
         }

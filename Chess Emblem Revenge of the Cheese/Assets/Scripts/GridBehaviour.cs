@@ -121,12 +121,14 @@ public class GridBehaviour : MonoBehaviour
                     }
                 }
 
-                //Obstacle
-                if (i == 7 && j == 7)
+                //Obstacles
+                if (j == 6 && j == 8)
                 {
-                    positionMatrix[i, j] = obstacles[0];
+                    if (Random.Range(0, 100) > 50 && !positionMatrix[i, j])
+                    {
+                        positionMatrix[i, j] = obstacles[0];
+                    }
                 }
-
             }
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.Processors;
 using UnityEngine.UI;
@@ -9,7 +10,8 @@ public class CombatController : MonoBehaviour
     MovementController movementController;
     Slider slider;
     public UnitStats unitStats;
-    public float currentHealth;
+    public UISelect uiSelect;
+    public int currentHealth { get; private set; }
     int minDamage, maxDamage;
     int range;
 
@@ -19,6 +21,7 @@ public class CombatController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        uiSelect = GameObject.Find("SelectedUnitUI").GetComponent<UISelect>();
         movementController = GetComponent<MovementController>();
         slider = GetComponentInChildren<Slider>();
         unitStats = movementController.unitStats;
@@ -52,10 +55,15 @@ public class CombatController : MonoBehaviour
     public void UpdateHealthbar()
     {
         slider.value = currentHealth;
+        if (!uiSelect)
+        {
+            return;
+        }
+        uiSelect.ChangeStatUI(unitStats, currentHealth);
     }
 
     //Tager en skade værdi og fjerner det fra unit liv
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
         if (currentHealth - damage <= 0)
         {

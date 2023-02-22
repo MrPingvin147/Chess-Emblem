@@ -12,8 +12,6 @@ public class PlayerController : MonoBehaviour
     bool unitSelected = false;
     MovementController selectedUnit;
 
-    public UISelect UIScript;
-
     [SerializeField]
     string playersTeam = "white";
 
@@ -136,7 +134,7 @@ public class PlayerController : MonoBehaviour
         selectedUnit = hit.transform.GetComponent<GridStat>().objektOnTile.GetComponent<MovementController>();
         selectedUnit.SelectUnit();
         unitSelected = true;
-        UIScript.ChangeStatUI(hit.transform.GetComponent<GridStat>().objektOnTile.GetComponent<CombatController>().unitStats, (int)hit.transform.GetComponent<GridStat>().objektOnTile.GetComponent<CombatController>().currentHealth);
+        selectedUnit.GetComponent<CombatController>().UpdateHealthbar();
     }
 
     private void MoveUnit(RaycastHit hit, bool attack = false)
