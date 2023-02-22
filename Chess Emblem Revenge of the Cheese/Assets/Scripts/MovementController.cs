@@ -70,10 +70,6 @@ public class MovementController : MonoBehaviour
         gridXPosition = (int)startGridPosition.x;
         gridYPosition = (int)startGridPosition.y;
 
-        Transform startTransform = gridBehaviour.gridArray[gridXPosition, gridYPosition].transform;
-        gridBehaviour.gridArray[gridXPosition, gridYPosition].GetComponent<GridStat>().objektOnTile = gameObject;
-        gameObject.transform.position = new Vector3(startTransform.position.x, startTransform.position.y + yOffset, startTransform.position.z);
-
         meshRenderer.material = deSelectedMaterial;
     }
 

@@ -68,3 +68,5 @@ MonoBehaviour:
   - {fileID: 2100000, guid: f90b4c66ddb39c54eb8eabc29d045fd7, type: 2}
   - {fileID: 2100000, guid: 8ac91423172dd5c4787b7db582c7d6b1, type: 2}
   - {fileID: 2100000, guid: 30676d8c2663bba4da28af8e60c7c830, type: 2}
+  obstacles:
+  - {fileID: 8783306491908617939, guid: c41d2a27ceb73bc438996ecc8d8658a4, type: 3}

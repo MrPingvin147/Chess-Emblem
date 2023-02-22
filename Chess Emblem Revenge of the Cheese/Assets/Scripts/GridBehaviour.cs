@@ -25,6 +25,8 @@ public class GridBehaviour : MonoBehaviour
     public GameObject[] units;
     public Material[] unitMaterials;
 
+    public GameObject[] obstacles;
+
     public GameObject[,] positionMatrix;
 
     public static GameObject instance;
@@ -119,6 +121,12 @@ public class GridBehaviour : MonoBehaviour
                     }
                 }
 
+                //Obstacle
+                if (i == 7 && j == 7)
+                {
+                    positionMatrix[i, j] = obstacles[0];
+                }
+
             }
         }
     }
@@ -132,27 +140,31 @@ public class GridBehaviour : MonoBehaviour
                 if (positionMatrix[i, j] != null)
                 {
                     Vector3 tmpPos = gridArray[i, j].transform.position;
-                    tmpPos.y += positionMatrix[i, j].GetComponent<MovementController>().yOffset;
 
                     GameObject obj = Instantiate(positionMatrix[i, j], tmpPos, Quaternion.identity, unitsParent.transform);
 
-                    MovementController movementController = obj.GetComponent<MovementController>();
+                    gridArray[i, j].GetComponent<GridStat>().objektOnTile = obj;
 
-                    movementController.startGridPosition.x = i;
-                    movementController.startGridPosition.y = j;
+                    if (obj.GetComponent<MovementController>())
+                    {
+                        MovementController movementController = obj.GetComponent<MovementController>();
 
-                    if (j > rows / 2)
-                    {
-                        movementController.selectedMaterial = unitMaterials[0];
-                        movementController.deSelectedMaterial = unitMaterials[1];
-                        movementController.team = "white";
-                    }
-                    if (j < rows / 2)
-                    {
-                        obj.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
-                        movementController.selectedMaterial = unitMaterials[2];
-                        movementController.deSelectedMaterial = unitMaterials[3];
-                        movementController.team = "black";
+                        movementController.startGridPosition.x = i;
+                        movementController.startGridPosition.y = j;
+
+                        if (j > rows / 2)
+                        {
+                            movementController.selectedMaterial = unitMaterials[0];
+                            movementController.deSelectedMaterial = unitMaterials[1];
+                            movementController.team = "white";
+                        }
+                        if (j < rows / 2)
+                        {
+                            obj.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+                            movementController.selectedMaterial = unitMaterials[2];
+                            movementController.deSelectedMaterial = unitMaterials[3];
+                            movementController.team = "black";
+                        }
                     }
                 }
             }
@@ -173,14 +185,6 @@ public class GridBehaviour : MonoBehaviour
         if (gridArray[endX, endY].GetComponent<GridStat>().objektOnTile && sum > 1)
         {
             float[] tmpArray = new float[4];
-            /*try { if (gridArray[endX + 1, endY].GetComponent<GridStat>().objektOnTile) { tmpArray[0] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX + 1, endY].transform.position); } }
-            catch { tmpArray[0] = 1000000; }
-            try { if (gridArray[endX - 1, endY].GetComponent<GridStat>().objektOnTile) { tmpArray[1] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX - 1, endY].transform.position); } }
-            catch { tmpArray[1] = 1000000; }
-            try { if (gridArray[endX, endY + 1].GetComponent<GridStat>().objektOnTile) { tmpArray[2] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY + 1].transform.position); } }
-            catch { tmpArray[2] = 1000000; }
-            try { if (gridArray[endX, endY - 1].GetComponent<GridStat>().objektOnTile) { tmpArray[3] = Vector3.Distance(gridArray[startX, startY].transform.position, gridArray[endX, endY - 1].transform.position); } }
-            catch { tmpArray[3] = 1000000; }*/
 
             try { if (gridArray[endX + 1, endY].GetComponent<GridStat>().objektOnTile == null) { tmpArray[0] = Mathf.Abs(startX - endX - 1) + Mathf.Abs(startY - endY); }
             else { tmpArray[0] = 50; } }
@@ -197,8 +201,6 @@ public class GridBehaviour : MonoBehaviour
             try { if (gridArray[endX, endY - 1].GetComponent<GridStat>().objektOnTile == null) { tmpArray[3] = Mathf.Abs(startX - endX) + Mathf.Abs(startY - endY + 1); } 
             else { tmpArray[3] = 53; } }
             catch { tmpArray[3] = 103; }
-
-            print(tmpArray[0] + ": " + tmpArray[1] + ": " + tmpArray[2] + ": " + tmpArray[3]);
 
             float minValue = 100000;
             int tmpInt = -10;
