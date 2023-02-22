@@ -21,7 +21,10 @@ public class CombatController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        uiSelect = GameObject.Find("SelectedUnitUI").GetComponent<UISelect>();
+        if (GameObject.Find("SelectedUnitUI"))
+        {
+            uiSelect = GameObject.Find("SelectedUnitUI").GetComponent<UISelect>();
+        }
         movementController = GetComponent<MovementController>();
         slider = GetComponentInChildren<Slider>();
         unitStats = movementController.unitStats;

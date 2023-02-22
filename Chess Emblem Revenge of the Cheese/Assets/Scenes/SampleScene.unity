@@ -606,6 +606,59 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6861567550375297835, guid: ca592bf8ea3b4b34bb8cea80a06292ba,
+        type: 3}
+      propertyPath: decorations.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861567550375297835, guid: ca592bf8ea3b4b34bb8cea80a06292ba,
+        type: 3}
+      propertyPath: decorations.Array.data[0]
+      value: 
+      objectReference: {fileID: 3533294976515646821, guid: c73ea6843be236145b89b20e7b85442d,
+        type: 3}
+    - target: {fileID: 6861567550375297835, guid: ca592bf8ea3b4b34bb8cea80a06292ba,
+        type: 3}
+      propertyPath: decorations.Array.data[1]
+      value: 
+      objectReference: {fileID: 8176282338375377547, guid: 1118ac664af1e7d41bb2d704bfc73042,
+        type: 3}
+    - target: {fileID: 6861567550375297835, guid: ca592bf8ea3b4b34bb8cea80a06292ba,
+        type: 3}
+      propertyPath: decorations.Array.data[2]
+      value: 
+      objectReference: {fileID: 6376028599826112832, guid: 90e3d03899b658548ba81d518489668b,
+        type: 3}
+    - target: {fileID: 6861567550375297835, guid: ca592bf8ea3b4b34bb8cea80a06292ba,
+        type: 3}
+      propertyPath: decorations.Array.data[3]
+      value: 
+      objectReference: {fileID: 4898757698846008749, guid: ef469d3036e593b4b9c5bc42f0730695,
+        type: 3}
+    - target: {fileID: 6861567550375297835, guid: ca592bf8ea3b4b34bb8cea80a06292ba,
+        type: 3}
+      propertyPath: decorations.Array.data[4]
+      value: 
+      objectReference: {fileID: 4874596493479460476, guid: 528b496af60440546a2bed18b537e988,
+        type: 3}
+    - target: {fileID: 6861567550375297835, guid: ca592bf8ea3b4b34bb8cea80a06292ba,
+        type: 3}
+      propertyPath: decorations.Array.data[5]
+      value: 
+      objectReference: {fileID: 299934727604683210, guid: e73290c8bdb319f4698f81ac9bacba20,
+        type: 3}
+    - target: {fileID: 6861567550375297835, guid: ca592bf8ea3b4b34bb8cea80a06292ba,
+        type: 3}
+      propertyPath: decorations.Array.data[6]
+      value: 
+      objectReference: {fileID: 3562767682413857820, guid: 582444201a3a5e54e83bff4239904511,
+        type: 3}
+    - target: {fileID: 6861567550375297835, guid: ca592bf8ea3b4b34bb8cea80a06292ba,
+        type: 3}
+      propertyPath: decorations.Array.data[7]
+      value: 
+      objectReference: {fileID: 216478661761967246, guid: 07343dbd3a018a94a8fd059e67fb8461,
+        type: 3}
     - target: {fileID: 6861567550375297836, guid: ca592bf8ea3b4b34bb8cea80a06292ba,
         type: 3}
       propertyPath: m_RootOrder

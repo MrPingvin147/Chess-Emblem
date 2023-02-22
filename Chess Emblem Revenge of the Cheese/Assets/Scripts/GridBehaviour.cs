@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GridBehaviour : MonoBehaviour
 {
@@ -27,6 +29,11 @@ public class GridBehaviour : MonoBehaviour
 
     public GameObject[] obstacles;
 
+    public GameObject[] decorations;
+    GameObject[,][] decorationMatrix;
+    GameObject decorationsParent;
+    
+
     public GameObject[,] positionMatrix;
 
     public static GameObject instance;
@@ -46,6 +53,7 @@ public class GridBehaviour : MonoBehaviour
 
         gridArray = new GameObject[columns, rows];
         positionMatrix = new GameObject[columns, rows];
+        decorationMatrix = new GameObject[columns, rows][];
 
         if (gridPrefab)
         {
@@ -57,8 +65,10 @@ public class GridBehaviour : MonoBehaviour
         }
 
         unitsParent = new GameObject("UnitParent");
+        decorationsParent = new GameObject("DecorationsParent");
         ArrangeUnits();
         SpawnUnits();
+        SpawnDecorations();
     }
 
     void ArrangeUnits()
@@ -122,9 +132,9 @@ public class GridBehaviour : MonoBehaviour
                 }
 
                 //Obstacles
-                if (j == 6 && j == 8)
+                if (j == 5 || j == 6 || j == 7 || j == 8)
                 {
-                    if (Random.Range(0, 100) > 50 && !positionMatrix[i, j])
+                    if (Random.Range(0, 100) > 80 && !positionMatrix[i, j])
                     {
                         positionMatrix[i, j] = obstacles[0];
                     }
@@ -167,6 +177,68 @@ public class GridBehaviour : MonoBehaviour
                             movementController.deSelectedMaterial = unitMaterials[3];
                             movementController.team = "black";
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    void SpawnDecorations()
+    {
+        for (int i = 0; i < columns; i++)
+        {
+            for (int j = 0; j < rows; j++)
+            {
+                int randomValue = Random.Range(0, 100);
+                int amountOfDecorations = 0;
+
+                if (randomValue <= 80)
+                {
+                    amountOfDecorations = 0;
+                }
+                else if (randomValue > 80 && randomValue <= 88)
+                {
+                    amountOfDecorations = 1;
+                }
+                else if (randomValue > 88 && randomValue <= 95)
+                {
+                    amountOfDecorations = 2;
+                }
+                else if (randomValue > 95 && randomValue <= 97)
+                {
+                    amountOfDecorations = 3;
+                }
+                else if (randomValue > 97 && randomValue <= 100)
+                {
+                    amountOfDecorations = 4;
+                }
+                decorationMatrix[i, j] = new GameObject[amountOfDecorations];
+                for (int k = 0; k < amountOfDecorations; k++)
+                {
+                    decorationMatrix[i, j][k] = decorations[Random.Range(0, decorations.Length)];
+                }
+            }
+        }
+
+        for (int i = 0; i < columns; i++)
+        {
+            for (int j = 0; j < rows; j++)
+            {
+                for (int k = 0; k < decorationMatrix[i,j].Length; k++)
+                {
+                    if (decorationMatrix[i, j][k])
+                    {
+                        GameObject obj = Instantiate(decorationMatrix[i, j][k], gridArray[i, j].transform.position, Quaternion.identity, decorationsParent.transform);
+
+                        Vector3 decorationPosition = new Vector3(Random.Range(scale * -0.4f, scale * 0.4f), obj.transform.position.y + 0.05f, Random.Range(scale * -0.4f, scale * 0.4f));
+                        Quaternion decorationRotation = Quaternion.Euler(0, Random.Range(0, 359), 0);
+                        float currentScale = decorationMatrix[i, j][k].transform.localScale.x;
+                        float newScale = currentScale - Random.Range(-0.2f, 0.2f);
+                        Vector3 decorationScale = new Vector3(newScale, newScale, newScale);
+
+                        obj.transform.localScale = decorationScale;
+                        obj.transform.position += decorationPosition;
+                        obj.transform.rotation = decorationRotation;
                     }
                 }
             }
