@@ -185,7 +185,46 @@ public class GridBehaviour : MonoBehaviour
 
     void SpawnDecorations()
     {
+        Texture2D texture = PerlinNoise.GenerateTexture(30, 14, 14);
+
         for (int i = 0; i < columns; i++)
+        {
+            for (int j = 0; j < rows; j++)
+            {
+                float value = texture.GetPixel(i, j).g;
+
+                decorationMatrix[i, j] = new GameObject[1];
+
+                if (value > 0.6f)
+                {
+                    decorationMatrix[i, j][0] = decorations[Random.Range(4, 6)];
+                }
+
+                if (value > 0.7f)
+                {
+                    decorationMatrix[i, j][0] = decorations[Random.Range(6, 8)];
+                }
+
+                if (value > 0.75f)
+                {
+                    decorationMatrix[i, j][0] = decorations[Random.Range(1, 3)];
+                }
+
+                if (value > 0.85f)
+                {
+                    if (Random.Range(1,3) == 1)
+                    {
+                        decorationMatrix[i, j][0] = decorations[0];
+                    }
+                    else
+                    {
+                        decorationMatrix[i, j][0] = decorations[decorations.Length - 1];
+                    }
+                }
+            }
+        }
+
+        /*for (int i = 0; i < columns; i++)
         {
             for (int j = 0; j < rows; j++)
             {
@@ -218,7 +257,7 @@ public class GridBehaviour : MonoBehaviour
                     decorationMatrix[i, j][k] = decorations[Random.Range(0, decorations.Length)];
                 }
             }
-        }
+        }*/
 
         for (int i = 0; i < columns; i++)
         {
