@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class CombatController : MonoBehaviour
 {
     MovementController movementController;
-    Slider slider;
     public UnitStats unitStats;
     public UISelect uiSelect;
     public int currentHealth { get; private set; }
@@ -23,11 +22,7 @@ public class CombatController : MonoBehaviour
     {
         uiSelect = GameObject.Find("SelectedUnitUI").GetComponent<UISelect>();
         movementController = GetComponent<MovementController>();
-        slider = GetComponentInChildren<Slider>();
         unitStats = movementController.unitStats;
-
-        slider.maxValue = unitStats.hp;
-        slider.value = unitStats.hp;
 
         currentHealth = unitStats.hp;
         minDamage = unitStats.minDmg;
@@ -54,12 +49,11 @@ public class CombatController : MonoBehaviour
     //Updatere liv værdien på livbaren over units
     public void UpdateHealthbar()
     {
-        slider.value = currentHealth;
         if (!uiSelect)
         {
             return;
         }
-        uiSelect.ChangeStatUI(unitStats, currentHealth);
+        uiSelect.ChangeStatUI(unitStats, currentHealth, movementController.team);
     }
 
     //Tager en skade værdi og fjerner det fra unit liv

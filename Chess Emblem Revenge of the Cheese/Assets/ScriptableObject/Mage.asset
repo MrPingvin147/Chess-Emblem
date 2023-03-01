@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1afda69303a3aa4b902520d54bafe45, type: 3}
   m_Name: Mage
   m_EditorClassIdentifier: 
+  className: Bishop
   atkRange: 3
   minDmg: 15
   maxDmg: 20

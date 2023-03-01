@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1afda69303a3aa4b902520d54bafe45, type: 3}
   m_Name: Knight
   m_EditorClassIdentifier: 
+  className: Knight
   atkRange: 0
   minDmg: 20
   maxDmg: 30
