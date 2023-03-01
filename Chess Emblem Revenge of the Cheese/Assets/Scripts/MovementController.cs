@@ -84,9 +84,9 @@ public class MovementController : MonoBehaviour
         RemoveArrowPath();
     }
 
-    public void MoveToLocation(int x, int y, GameObject objectOnTile = null)
+    public void MoveToLocation(int x, int y, int movement, GameObject objectOnTile = null)
     {
-        int movementLeft = unitStats.spd;
+        int movementLeft = movement;
         int sum = 0;
         path = gridBehaviour.GetPath(this, x, y);
 
@@ -138,7 +138,7 @@ public class MovementController : MonoBehaviour
                     }
                 }
 
-                StartCoroutine(playerController.EnableInteract());
+                playerController.ChangeTurn();
 
                 return;
             }
@@ -253,7 +253,14 @@ public class MovementController : MonoBehaviour
             }
         }
 
-        StartCoroutine(playerController.EnableInteract()); 
+        if (movementLeft <= 0)
+        {
+            playerController.ChangeTurn();
+        }
+        else
+        {
+            StartCoroutine(playerController.EnableInteract());
+        }
     }
 
     public void ShowPathToMouse(int mouseX, int mouseY, bool isEnemy = false)
