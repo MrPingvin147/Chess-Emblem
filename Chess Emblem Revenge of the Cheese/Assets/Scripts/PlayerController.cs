@@ -5,8 +5,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public bool playersTurn = false;
-
     private bool canInteract = true;
 
     bool unitSelected = false;
@@ -16,7 +14,6 @@ public class PlayerController : MonoBehaviour
     string playersTeam = "white";
 
     public LayerMask groundLayer;
-
 
     private void Update()
     {
@@ -58,10 +55,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnFire(InputValue value)
     {
-        if (playersTurn)
-        {
-            LeftClickChecks();
-        }
+        LeftClickChecks();
     }
 
     private void LeftClickChecks()
@@ -136,6 +130,18 @@ public class PlayerController : MonoBehaviour
         unitSelected = true;
         selectedUnit.GetComponent<CombatController>().UpdateHealthbar();
     }
+    private void SelectUnit(MovementController unit = null)
+    {
+        if (selectedUnit != null)
+        {
+            selectedUnit.DeselectUnit();
+        }
+
+        selectedUnit = unit;
+        selectedUnit.SelectUnit();
+        unitSelected = true;
+        selectedUnit.GetComponent<CombatController>().UpdateHealthbar();
+    }
 
     private void MoveUnit(RaycastHit hit, bool attack = false)
     {
@@ -146,11 +152,11 @@ public class PlayerController : MonoBehaviour
 
         if (attack)
         {
-            selectedUnit.MoveToLocation(x, y, hit.transform.GetComponent<GridStat>().objektOnTile);
+            selectedUnit.MoveToLocation(x, y, selectedUnit.unitStats.spd, hit.transform.GetComponent<GridStat>().objektOnTile);
         }
         else
         {
-            selectedUnit.MoveToLocation(x, y);
+            selectedUnit.MoveToLocation(x, y, selectedUnit.unitStats.spd);
         }
         unitSelected = false;
         selectedUnit.DeselectUnit();
@@ -161,6 +167,30 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         canInteract = true;
+    }
+
+    public void ChangeTurn()
+    {
+        unitSelected = false;
+        
+        if (selectedUnit != null)
+        {
+            selectedUnit.DeselectUnit();
+            selectedUnit = null;
+        }
+
+        canInteract = true;
+        
+        if (playersTeam == "white")
+        {
+            playersTeam = "black";
+        }
+        else
+        {
+            playersTeam = "white";
+        }
+
+        StartCoroutine(EnableInteract());
     }
 
     public void OnUnitDeath(GameObject unit)
