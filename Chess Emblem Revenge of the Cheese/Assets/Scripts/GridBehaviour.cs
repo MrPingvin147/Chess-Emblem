@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class GridBehaviour : MonoBehaviour
 {
@@ -32,9 +31,12 @@ public class GridBehaviour : MonoBehaviour
     public GameObject[] decorations;
     GameObject[,][] decorationMatrix;
     GameObject decorationsParent;
-    
+
+    GameObject[,][] gridSqaureMatrix;
 
     public GameObject[,] positionMatrix;
+
+    public Transform CameraRotationPoint;
 
     public static GameObject instance;
 
@@ -51,9 +53,15 @@ public class GridBehaviour : MonoBehaviour
             return;
         }
 
+        GenerateLevel();
+    }
+
+    public void GenerateLevel()
+    {
         gridArray = new GameObject[columns, rows];
         positionMatrix = new GameObject[columns, rows];
         decorationMatrix = new GameObject[columns, rows][];
+        gridSqaureMatrix = new GameObject[columns, rows][];
 
         if (gridPrefab)
         {
@@ -69,6 +77,31 @@ public class GridBehaviour : MonoBehaviour
         ArrangeUnits();
         SpawnUnits();
         SpawnDecorations();
+    }
+
+    public void DeleteLevel()
+    {
+        for (int i = 0; i < columns; i++)
+        {
+            for (int j = 0; j < rows; j++)
+            {
+                Destroy(gridArray[i, j]);
+                Destroy(positionMatrix[i, j]);
+
+                for (int k = 0; k < decorationMatrix[i,j].Length; k++)
+                {
+                    Destroy(decorationMatrix[i, j][k]);
+                }
+
+                for (int k = 0; k < gridSqaureMatrix[i,j].Length; k++)
+                {
+                    Destroy(gridSqaureMatrix[i, j][k]);
+                }
+            }
+        }
+
+        Destroy(unitsParent);
+        Destroy(decorationsParent);
     }
 
     void ArrangeUnits()
@@ -154,6 +187,8 @@ public class GridBehaviour : MonoBehaviour
                     Vector3 tmpPos = gridArray[i, j].transform.position;
 
                     GameObject obj = Instantiate(positionMatrix[i, j], tmpPos, Quaternion.identity, unitsParent.transform);
+
+                    positionMatrix[i, j] = obj;
 
                     gridArray[i, j].GetComponent<GridStat>().objektOnTile = obj;
 
@@ -269,6 +304,8 @@ public class GridBehaviour : MonoBehaviour
                     {
                         GameObject obj = Instantiate(decorationMatrix[i, j][k], gridArray[i, j].transform.position, Quaternion.identity, decorationsParent.transform);
 
+                        decorationMatrix[i, j][k] = obj;
+
                         Vector3 decorationPosition = new Vector3(Random.Range(scale * -0.4f, scale * 0.4f), obj.transform.position.y + 0.05f, Random.Range(scale * -0.4f, scale * 0.4f));
                         Quaternion decorationRotation = Quaternion.Euler(0, Random.Range(0, 359), 0);
                         float currentScale = decorationMatrix[i, j][k].transform.localScale.x;
@@ -354,35 +391,42 @@ public class GridBehaviour : MonoBehaviour
             }
         }
 
+        CameraRotationPoint.position = gridArray[rows - 1, columns - 1].transform.position / 2;
+
         float distance = (gridArray[1, 0].transform.position.x - gridArray[0, 0].transform.position.x) / 2;
         for (int i = 0; i < columns; i++)
         {
             for (int j = 0; j < rows; j++)
             {
+                List<GameObject> tmpList = new List<GameObject>();
                 Vector3 tmpPos = new Vector3(leftBottomLocation.x + scale * i, leftBottomLocation.y, leftBottomLocation.z + scale * j);
                 tmpPos.x -= distance;
                 tmpPos.y = 0.05f;
 
-                Instantiate(gridSqaure, tmpPos, Quaternion.Euler(new Vector3(0, 0, 0)), gameObject.transform);
+                tmpList.Add(Instantiate(gridSqaure, tmpPos, Quaternion.Euler(new Vector3(0, 0, 0)), gameObject.transform));
 
                 if (i == columns - 1)
                 {
                     tmpPos.x += distance * 2;
-                    Instantiate(gridSqaure, tmpPos, Quaternion.Euler(new Vector3(0, 0, 0)), gameObject.transform);
+                    tmpList.Add(Instantiate(gridSqaure, tmpPos, Quaternion.Euler(new Vector3(0, 0, 0)), gameObject.transform));
                     tmpPos.x -= distance * 2;
                 }
 
                 tmpPos.x += distance;
                 tmpPos.z += distance;
-                Instantiate(gridSqaure, tmpPos, Quaternion.Euler(new Vector3(0, 90, 0)), gameObject.transform);
+                tmpList.Add(Instantiate(gridSqaure, tmpPos, Quaternion.Euler(new Vector3(0, 90, 0)), gameObject.transform));
 
                 if (j == 0)
                 {
                     tmpPos.z -= distance * 2;
-                    Instantiate(gridSqaure, tmpPos, Quaternion.Euler(new Vector3(0, 90, 0)), gameObject.transform);
+                    tmpList.Add(Instantiate(gridSqaure, tmpPos, Quaternion.Euler(new Vector3(0, 90, 0)), gameObject.transform));
                 }
+
+                gridSqaureMatrix[i, j] = tmpList.ToArray();
             }
         }
+
+
     }
 
     void SetDistance()
