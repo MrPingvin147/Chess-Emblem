@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ExceptionServices;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class GridBehaviour : MonoBehaviour
 {
@@ -145,6 +146,7 @@ public class GridBehaviour : MonoBehaviour
 
     void SpawnUnits()
     {
+        Color Bleck = new Color(46, 42, 42);
         for (int i = 0; i < columns; i++)
         {
             for (int j = 0; j < rows; j++)
@@ -160,6 +162,7 @@ public class GridBehaviour : MonoBehaviour
                     if (obj.GetComponent<MovementController>())
                     {
                         MovementController movementController = obj.GetComponent<MovementController>();
+                        Image Icons = movementController.GetComponentInChildren<Canvas>().GetComponentInChildren<Image>();
 
                         movementController.startGridPosition.x = i;
                         movementController.startGridPosition.y = j;
@@ -169,6 +172,7 @@ public class GridBehaviour : MonoBehaviour
                             movementController.selectedMaterial = unitMaterials[0];
                             movementController.deSelectedMaterial = unitMaterials[1];
                             movementController.team = "white";
+                            Icons.color = Bleck;
                         }
                         if (j < rows / 2)
                         {
@@ -176,6 +180,7 @@ public class GridBehaviour : MonoBehaviour
                             movementController.selectedMaterial = unitMaterials[2];
                             movementController.deSelectedMaterial = unitMaterials[3];
                             movementController.team = "black";
+                            Icons.color = Color.white;
                         }
                     }
                 }

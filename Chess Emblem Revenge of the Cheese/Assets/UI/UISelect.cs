@@ -10,6 +10,7 @@ public class UISelect : MonoBehaviour
     public TMP_Text UnitName;
     public TMP_Text StatsNames;
     public TMP_Text StatsNumbers;
+    public TMP_Text TimerText;
     public Slider HealthSlider;
     public Image SelectIcon;
 
@@ -17,9 +18,40 @@ public class UISelect : MonoBehaviour
 
     public Sprite[] UICharacters;
 
+    int betasecs = 0;
+    int betamins = 1;
+
     // Start is called before the first frame update
     void Start()
     {
+    }
+
+    public void Update()
+    {
+        float alfa = Time.time;
+        betasecs = Mathf.FloorToInt(alfa);
+        if (betasecs >= 60 * betamins)
+        {
+            betamins += 1;
+        }
+
+        // Both mins and secs below 10
+        if (betamins < 11 && (betasecs- 60 * (betamins - 1)) < 10)
+        {
+            TimerText.text = ("0" + (betamins - 1) + ":0" + (betasecs - 60 * (betamins - 1)));
+        }
+        else if (betamins > 10)
+        {
+            TimerText.text = ((betamins - 1) + ":0" + (betasecs - 60 * (betamins - 1)));
+        }
+        else if (betasecs - 60 * (betamins - 1) >= 10)
+        {
+            TimerText.text = ("0" + (betamins - 1) + ":" + (betasecs - 60 * (betamins - 1)));
+        }
+        else
+        {
+            TimerText.text = (betamins - 1 + ":" + (betasecs - 60 * (betamins - 1)));
+        }
     }
 
     public void ChangeStatUI(UnitStats Unit, int CurrentHP, string Colour)

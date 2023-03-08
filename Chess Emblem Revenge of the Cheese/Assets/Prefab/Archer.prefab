@@ -422,6 +422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a48af2ade8ed2e3439bf919a6a3f2298, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Walk: {fileID: 0}
   yOffset: 0
   startGridPosition: {x: 0, y: 0}
   targetLocationX: 5

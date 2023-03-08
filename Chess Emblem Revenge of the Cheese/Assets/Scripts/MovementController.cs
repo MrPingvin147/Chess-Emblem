@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -88,6 +89,7 @@ public class MovementController : MonoBehaviour
     {
         int movementLeft = movement;
         int sum = 0;
+        /*AudioManager.Instance.PlaySFX("Walk");*/
         path = gridBehaviour.GetPath(this, x, y);
 
         if (objectOnTile)

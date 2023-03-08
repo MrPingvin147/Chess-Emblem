@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888f72daaa3b7de4e8a444aa533501f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playersTurn: 1
   playersTeam: black
   groundLayer:
     serializedVersion: 2
