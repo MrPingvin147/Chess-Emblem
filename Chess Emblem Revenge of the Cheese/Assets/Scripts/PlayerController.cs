@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour
     string playersTeam = "white";
 
     public LayerMask groundLayer;
+
+    public CinemachineVirtualCamera virtualCamera;
 
     private void Update()
     {
@@ -158,9 +161,13 @@ public class PlayerController : MonoBehaviour
         {
             selectedUnit.MoveToLocation(x, y, selectedUnit.unitStats.spd);
         }
-        unitSelected = false;
-        selectedUnit.DeselectUnit();
-        selectedUnit = null;
+
+        if (unitSelected)
+        {
+            unitSelected = false;
+            selectedUnit.DeselectUnit();
+            selectedUnit = null;
+        }
     }
 
     public IEnumerator EnableInteract()
@@ -190,6 +197,20 @@ public class PlayerController : MonoBehaviour
             playersTeam = "white";
         }
 
+        MoveCamera();
+    }
+
+    private void MoveCamera()
+    {
+        if (playersTeam == "white")
+        {
+            virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset = new Vector3(0, 4, 8.25f);
+        }
+        else
+        {
+            virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset = new Vector3(0, 4, -8.25f);
+        }
+
         StartCoroutine(EnableInteract());
     }
 
@@ -200,6 +221,11 @@ public class PlayerController : MonoBehaviour
             unitSelected = false;
             selectedUnit.DeselectUnit();
             selectedUnit = null;
+        }
+
+        if (unit.GetComponent<MovementController>().unitStats.className == "King")
+        {
+            playersTeam = "white";
         }
     }
 

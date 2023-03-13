@@ -255,14 +255,16 @@ public class MovementController : MonoBehaviour
             }
         }
 
-        if (movementLeft <= 0)
+        playerController.ChangeTurn();
+
+        /*if (movementLeft <= 0)
         {
             playerController.ChangeTurn();
         }
         else
         {
             StartCoroutine(playerController.EnableInteract());
-        }
+        }*/
     }
 
     public void ShowPathToMouse(int mouseX, int mouseY, bool isEnemy = false)
