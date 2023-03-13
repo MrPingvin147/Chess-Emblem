@@ -16,7 +16,16 @@ public class PlayerController : MonoBehaviour
 
     public LayerMask groundLayer;
 
-    public CinemachineVirtualCamera virtualCamera;
+    CinemachineVirtualCamera virtualCamera;
+    [HideInInspector]
+    public Transform cameraRotationPoint;
+
+    private void Awake()
+    {
+        CreateCamera();
+
+        MoveCamera();
+    }
 
     private void Update()
     {
@@ -212,6 +221,22 @@ public class PlayerController : MonoBehaviour
         }
 
         StartCoroutine(EnableInteract());
+    }
+
+    private void CreateCamera()
+    {
+        GameObject tmpGameobject = new GameObject("CinemachineVirtualCamera");
+        virtualCamera = tmpGameobject.AddComponent<CinemachineVirtualCamera>();
+        CinemachineFramingTransposer tmpTransposer = virtualCamera.AddCinemachineComponent<CinemachineFramingTransposer>();
+        virtualCamera.AddCinemachineComponent<CinemachineComposer>();
+
+        tmpGameobject = new GameObject("cameraRotationPoint");
+
+        cameraRotationPoint = tmpGameobject.transform;
+
+        virtualCamera.m_Lens.FieldOfView = 60f;
+        virtualCamera.LookAt = cameraRotationPoint;
+        virtualCamera.Follow = cameraRotationPoint;
     }
 
     public void OnUnitDeath(GameObject unit)

@@ -38,13 +38,14 @@ public class GridBehaviour : MonoBehaviour
 
     public GameObject[,] positionMatrix;
 
-    public Transform CameraRotationPoint;
+    [HideInInspector]
+    public Transform cameraRotationPoint;
 
     public static GameObject instance;
 
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         if (instance == null)
         {
@@ -60,6 +61,8 @@ public class GridBehaviour : MonoBehaviour
 
     public void GenerateLevel()
     {
+        cameraRotationPoint = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().cameraRotationPoint;
+
         gridArray = new GameObject[columns, rows];
         positionMatrix = new GameObject[columns, rows];
         decorationMatrix = new GameObject[columns, rows][];
@@ -395,7 +398,7 @@ public class GridBehaviour : MonoBehaviour
             }
         }
 
-        CameraRotationPoint.position = gridArray[rows - 1, columns - 1].transform.position / 2;
+        cameraRotationPoint.position = gridArray[rows - 1, columns - 1].transform.position / 2;
 
         float distance = (gridArray[1, 0].transform.position.x - gridArray[0, 0].transform.position.x) / 2;
         for (int i = 0; i < columns; i++)
