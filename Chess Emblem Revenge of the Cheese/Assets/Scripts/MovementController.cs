@@ -89,8 +89,8 @@ public class MovementController : MonoBehaviour
     {
         int movementLeft = movement;
         int sum = 0;
-        /*AudioManager.Instance.PlaySFX("Walk");*/
         path = gridBehaviour.GetPath(this, x, y);
+        AudioManager.Instance.PlaySFX("Walk", 1.4f);
 
         if (objectOnTile)
         {

@@ -183,7 +183,7 @@ public class GridBehaviour : MonoBehaviour
 
     void SpawnUnits()
     {
-        Color Bleck = new Color(46, 42, 42);
+        Color Bleck = new Color(42, 42, 42);
         for (int i = 0; i < columns; i++)
         {
             for (int j = 0; j < rows; j++)
@@ -211,7 +211,7 @@ public class GridBehaviour : MonoBehaviour
                             movementController.selectedMaterial = unitMaterials[0];
                             movementController.deSelectedMaterial = unitMaterials[1];
                             movementController.team = "white";
-                            Icons.color = Bleck;
+                            Icons.color = Color.black;
                         }
                         if (j < rows / 2)
                         {
