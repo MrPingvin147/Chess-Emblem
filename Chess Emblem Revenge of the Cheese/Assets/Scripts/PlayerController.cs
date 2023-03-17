@@ -90,16 +90,18 @@ public class PlayerController : MonoBehaviour
             {
                 GameObject objectOnTile = hit.transform.GetComponent<GridStat>().objektOnTile;
 
-
-                if (objectOnTile.GetComponent<MovementController>().team == playersTeam)
+                if (objectOnTile.GetComponent<MovementController>())
                 {
-                    SelectUnit(hit);
-                    return;
-                }
-                else if (objectOnTile.GetComponent<MovementController>().team != playersTeam)
-                {
-                    MoveUnit(hit, true);
-                    return;
+                    if (objectOnTile.GetComponent<MovementController>().team == playersTeam)
+                    {
+                        SelectUnit(hit);
+                        return;
+                    }
+                    else if (objectOnTile.GetComponent<MovementController>().team != playersTeam)
+                    {
+                        MoveUnit(hit, true);
+                        return;
+                    }
                 }
             }
             MoveUnit(hit);
